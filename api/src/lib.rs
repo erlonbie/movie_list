@@ -2,7 +2,6 @@ pub mod models;
 pub mod schema;
 
 
-// #[macro_use]
 use rocket::serde::{Deserialize, Serialize};
 use rocket_sync_db_pools::database;
 
@@ -12,9 +11,6 @@ pub struct Config {
     pub name: String,
     pub age: u8,
 }
-
-// #[macro_use]
-// extern crate rocket;
 
 #[macro_use]
 extern crate diesel;
