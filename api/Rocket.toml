@@ -13,3 +13,6 @@ url = "postgres://postgres:example@db1:5432/postgres"
 [global.databases.db2]
 url = "postgres://postgres:example@db2:5432/postgres"
 
+# [global.databases]
+# primary = { url = "postgres://postgres:example@db1:5432/db1", pool_size = 10 }
+# secondary = { url = "postgres://postgres:example@db2:5432/db2", pool_size = 10 }

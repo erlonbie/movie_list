@@ -23,8 +23,8 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: example
-    # ports:
-    #   - '5432:5432'
+    ports:
+      - '5432:5432'
     volumes:
       - db_1:/var/lib/postgresql/data
       - ./db1.sql:/docker-entrypoint-initdb.d/db1.sql
@@ -36,8 +36,8 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: example
-    # ports:
-    #   - '5432:5432'
+    ports:
+      - '5433:5432'
     volumes:
       - db_2:/var/lib/postgresql/data
       - ./db2.sql:/docker-entrypoint-initdb.d/db2.sql
