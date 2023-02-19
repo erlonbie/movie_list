@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  api:
+    build: 
+      context: ./api
+    working_dir: /app
+    # environment:
+    #   - PORT=3000
+    #   - DB1_URL=postgresql://example:123456@db1:5432/db
+    #   - DB2_URL=postgresql://mestre:123456@db2:5432/db
+    ports:
+      - 8000:8000
+    volumes:
+      - ./api:/app
+    depends_on:
+      - db1
+      - db2
+    networks:
+      - my_network
+  db1:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+    # ports:
+    #   - '5432:5432'
+    volumes:
+      - db_1:/var/lib/postgresql/data
+      - ./db1.sql:/docker-entrypoint-initdb.d/db1.sql
+    networks:
+      - my_network
+  db2:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+    # ports:
+    #   - '5432:5432'
+    volumes:
+      - db_2:/var/lib/postgresql/data
+      - ./db2.sql:/docker-entrypoint-initdb.d/db2.sql
+    networks:
+      - my_network
+volumes:
+  db_1:
+  db_2:
+
+networks:
+  my_network:

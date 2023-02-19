@@ -1,0 +1,15 @@
+# ./Rocket.toml
+
+[default]
+name = "Erlon"
+age = 31
+
+[global]
+address = "0.0.0.0"
+
+[global.databases.db1]
+url = "postgres://postgres:example@db1:5432/postgres"
+
+[global.databases.db2]
+url = "postgres://postgres:example@db2:5432/postgres"
+
