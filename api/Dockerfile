@@ -30,6 +30,8 @@ COPY . .
 
 # RUN cargo build --release
 
+RUN rustup override set nightly
+
 RUN cargo install cargo-watch
 
 RUN cargo install diesel_cli --no-default-features --features postgres
