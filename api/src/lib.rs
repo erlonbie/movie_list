@@ -1,10 +1,8 @@
 pub mod models;
 pub mod schema;
 
-
 use rocket::serde::{Deserialize, Serialize};
 use rocket_sync_db_pools::database;
-
 
 #[derive(Deserialize)]
 pub struct Config {

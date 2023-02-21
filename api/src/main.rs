@@ -1,12 +1,41 @@
 use diesel::prelude::*;
 
+use api::{
+    models::{BlogPost, NewBlogPost},
+    schema::blog_posts,
+    ApiError, Config, Db1, Db2,
+};
 use rocket::{
-    fairing::AdHoc,
+    fairing::{AdHoc, Fairing, Info, Kind},
+    http::Header,
+    // fairing::AdHoc,
     response::status::{NoContent, NotFound},
     serde::json::Json,
+    Request,
+    Response,
     State,
 };
-use api::{models::BlogPost, schema::blog_posts, ApiError, Config, Db1, Db2};
+
+pub struct CORS;
+#[rocket::async_trait]
+impl Fairing for CORS {
+    fn info(&self) -> Info {
+        Info {
+            name: "Add CORS headers to responses",
+            kind: Kind::Response,
+        }
+    }
+
+    async fn on_response<'r>(&self, _req: &'r Request<'_>, response: &mut Response<'r>) {
+        response.set_header(Header::new("Access-Control-Allow-Origin", "*"));
+        response.set_header(Header::new(
+            "Access-Control-Allow-Methods",
+            "POST, GET, PATCH, OPTIONS, DELETE",
+        ));
+        response.set_header(Header::new("Access-Control-Allow-Headers", "*"));
+        response.set_header(Header::new("Access-Control-Allow-Credentials", "true"));
+    }
+}
 
 #[rocket::get("/")]
 fn index() -> &'static str {
@@ -44,9 +73,11 @@ async fn get_all_blog_posts(connection1: Db1, connection2: Db2) -> Json<Vec<Blog
 
     let mut data = Vec::new();
     data.extend(v1);
-    for item2 in v2 {
+    for mut item2 in v2 {
         if !data.contains(&item2) {
             data.push(item2);
+        } else {
+            item2.body = "both".to_string();
         }
     }
     data.sort();
@@ -74,7 +105,7 @@ fn get_blog_post(id: i32) -> Json<BlogPost> {
 }
 
 #[rocket::post("/db1", data = "<blog_post>")]
-async fn create_blog_post1(connection: Db1, blog_post: Json<BlogPost>) -> Json<BlogPost> {
+async fn create_blog_post1(connection: Db1, blog_post: Json<NewBlogPost>) -> Json<BlogPost> {
     connection
         .run(move |c| {
             diesel::insert_into(blog_posts::table)
@@ -84,6 +115,29 @@ async fn create_blog_post1(connection: Db1, blog_post: Json<BlogPost>) -> Json<B
         .await
         .map(Json)
         .expect("boo")
+}
+
+#[rocket::options("/db1/delete/<id>")]
+async fn destroy1_option(connection: Db1, id: i32) -> Result<NoContent, NotFound<Json<ApiError>>> {
+    connection
+        .run(move |c| {
+            // let affected = diesel::delete(blog_posts::table.filter(blog_posts::title.eq(title)))
+            let affected = diesel::delete(blog_posts::table.filter(blog_posts::id.eq(id)))
+                .execute(c)
+                .expect("Connection is broken");
+            match affected {
+                1 => Ok(()),
+                0 => Err("NotFound"),
+                _ => Err("???"),
+            }
+        })
+        .await
+        .map(|_| NoContent)
+        .map_err(|e| {
+            NotFound(Json(ApiError {
+                details: e.to_string(),
+            }))
+        })
 }
 
 #[rocket::delete("/db1/delete/<id>")]
@@ -110,7 +164,7 @@ async fn destroy1(connection: Db1, id: i32) -> Result<NoContent, NotFound<Json<A
 }
 
 #[rocket::post("/db2", data = "<blog_post>")]
-async fn create_blog_post2(connection: Db2, blog_post: Json<BlogPost>) -> Json<BlogPost> {
+async fn create_blog_post2(connection: Db2, blog_post: Json<NewBlogPost>) -> Json<BlogPost> {
     connection
         .run(move |c| {
             diesel::insert_into(blog_posts::table)
@@ -120,6 +174,29 @@ async fn create_blog_post2(connection: Db2, blog_post: Json<BlogPost>) -> Json<B
         .await
         .map(Json)
         .expect("boo")
+}
+
+#[rocket::options("/db2/delete/<id>")]
+async fn destroy2_option(connection: Db2, id: i32) -> Result<NoContent, NotFound<Json<ApiError>>> {
+    connection
+        .run(move |c| {
+            // let affected = diesel::delete(blog_posts::table.filter(blog_posts::title.eq(title)))
+            let affected = diesel::delete(blog_posts::table.filter(blog_posts::id.eq(id)))
+                .execute(c)
+                .expect("Connection is broken");
+            match affected {
+                1 => Ok(()),
+                0 => Err("NotFound"),
+                _ => Err("???"),
+            }
+        })
+        .await
+        .map(|_| NoContent)
+        .map_err(|e| {
+            NotFound(Json(ApiError {
+                details: e.to_string(),
+            }))
+        })
 }
 
 #[rocket::delete("/db2/delete/<id>")]
@@ -157,6 +234,7 @@ fn rocket() -> _ {
         .attach(Db1::fairing())
         .attach(Db2::fairing())
         .attach(AdHoc::config::<Config>())
+        .attach(CORS)
         .mount("/", rocket::routes![index, get_config])
         .mount(
             "/blog-posts",
@@ -169,7 +247,9 @@ fn rocket() -> _ {
                 create_blog_post1,
                 create_blog_post2,
                 destroy1,
-                destroy2
+                destroy1_option,
+                destroy2,
+                destroy2_option
             ],
         )
 }
