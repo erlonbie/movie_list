@@ -30,3 +30,11 @@ impl PartialOrd for BlogPost {
         Some(self.cmp(other))
     }
 }
+
+#[derive(Serialize, Deserialize, Queryable, AsChangeset, Debug, Insertable)]
+#[table_name = "blog_posts"]
+pub struct NewBlogPost {
+    pub title: String,
+    pub body: String,
+    pub published: bool,
+}

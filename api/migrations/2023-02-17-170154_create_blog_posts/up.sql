@@ -1,7 +1,8 @@
 -- Your SQL goes here-- Your SQL goes here
-CREATE TABLE blog_posts (
-  id SERIAL PRIMARY KEY,
-  title VARCHAR NOT NULL,
+CREATE TABLE IF NOT EXISTS blog_posts (
+  id SERIAL,
+  title VARCHAR ,
   body TEXT NOT NULL,
-  published BOOLEAN NOT NULL DEFAULT 'f'
-)
+  published BOOLEAN NOT NULL DEFAULT 'f',
+  PRIMARY KEY (title)
+);
