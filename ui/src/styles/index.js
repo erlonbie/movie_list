@@ -13,7 +13,7 @@ export const GlobalStyle = createGlobalStyle`
 
 export const Container = styled.div`
   width: 100%;
-  min-height: 895px;
+  min-height: 968px;
   background: rgba(0, 0, 0, 0.1);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
@@ -27,7 +27,7 @@ export const Container = styled.div`
     font-weight: 600;
     font-size: 48px;
     line-height: 72px;
-    color: #da2535;
+    color: #8A6EB6;
   }
 `
 
@@ -43,13 +43,13 @@ export const Input = styled.input`
   font-weight: 700;
   font-size: 16px;
   line-height: 24px;
-  color: #da2535;
+  color: #000000;
 
   &::placeholder {
     font-weight: 700;
     font-size: 16px;
     line-height: 24px;
-    color: #da2535;
+    color: grey;
   }
 `
 
@@ -69,8 +69,7 @@ export const Spacer = styled.div`
 export const Button = styled.button`
   width: 112px;
   height: 50px;
-  /* background: #da2535; */
-  background: ${(props) => (props.id == 'bd1' ? '#da2535' : 'blue')};
+  background: ${(props) => (props.id == 'bd1' ? '#da2535' : '#5C97FF')};
   border-radius: 10px;
   border: none;
 
@@ -81,7 +80,7 @@ export const Button = styled.button`
   /* padding: 10px; */
 
   font-weight: 500;
-  font-size: 16px;
+  font-size: 17px;
   line-height: 24px;
   color: #fbfbfb;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -109,12 +108,19 @@ export const Item = styled.li`
   justify-content: space-between;
   flex-wrap: wrap;
 
+    &:hover {
+      opacity: 0.85;
+    }
+    &:active {
+      opacity: 0.5;
+    }
+
   p {
     font-weight: 500;
     font-size: 16px;
     line-height: 24px;
     text-decoration-line: ${(props) => (props.checked ? 'line-through' : '')};
-    color: ${(props) => (props.checked ? '#ffffff' : '#000000')};
+    /* color: ${(props) => (props.checked ? '#ffffff' : '#000000')}; */
 
     width: 80%;
     overflow-wrap: break-word;
@@ -124,9 +130,11 @@ export const Item = styled.li`
 
   button {
     background: transparent;
-    /* background: ${(props) => (props.id == 'bd1' ? '#da2535' : 'blue')}; */
+    /* color: ${props => props.color || "#da2535"}; */
     border: none;
     cursor: pointer;
+    /* margin: ${props => props.size}; */
+    margin: ${(props) => props.margin || '0px 13px 0px 0px'};
 
     &:hover {
       opacity: 0.3;
@@ -142,7 +150,7 @@ export const Item = styled.li`
     align-items: center;
     display: flex;
     justify-content: center;
-    /* background: ${(props) => (props.id == 'bd1' ? '#da2535' : 'blue')}; */
+    /* color: ${props => props.color || "#da2535"}; */
     /* background: ${(props) => (props.id == 'bd1' ? 'red' : 'blue')}; */
     /* color: ${(props) => (props.checked ? '#ffffff' : '#000000')}; */
   }

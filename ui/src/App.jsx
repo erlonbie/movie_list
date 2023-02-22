@@ -75,7 +75,6 @@ function App() {
 
       <ul>
         {movieItem?.map((movieText) => (
-          // <React.Fragment key={movieText.title}>
           <>
             <Item
               // Item
@@ -88,19 +87,19 @@ function App() {
               <Flex direction='row'>
                 {movieText.body == 'both' ? (
                   <div>
-                    <button onClick={() => delteMovie('db1', movieText.title)}>
-                      <i className='bx bx-trash-alt '>1</i>
+                    <button onClick={() => delteMovie('db1', movieText.title)} >
+                      <i className='bx bx-trash '>1</i>
                     </button>
-                    <button onClick={() => delteMovie('db2', movieText.title)}>
+                    <button onClick={() => delteMovie('db2', movieText.title)} color='blue'>
                       <i className='bx bx-trash '>2</i>
                     </button>
                   </div>
                 ) : movieText.published ? (
-                  <button onClick={() => delteMovie('db1', movieText.title)}>
-                    <i className='bx bx-trash-alt '>1</i>
+                  <button onClick={() => delteMovie('db1', movieText.title)} >
+                    <i className='bx bx-trash '>1</i>
                   </button>
                 ) : (
-                  <button onClick={() => delteMovie('db2', movieText.title)}>
+                  <button onClick={() => delteMovie('db2', movieText.title)} color='blue'>
                     <i className='bx bx-trash '>2</i>
                   </button>
                 )}
