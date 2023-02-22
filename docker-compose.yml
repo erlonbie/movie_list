@@ -1,5 +1,14 @@
 version: '3.8'
 services:
+  ui:
+    build: ./ui
+    working_dir: /app
+    ports:
+      - 80:3001
+    volumes:
+      - ./ui:/app
+    depends_on:
+      - api
   api:
     build: 
       context: ./api
