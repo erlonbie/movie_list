@@ -42,5 +42,5 @@ docker-compose up --build
 
 * O botão de lixeira com a numeração representa a ação de deletar no respectivo banco de dados. Se o filme estiver em ambos, ele terá os dois ícones e será necessário apagá-lo duas vezes (uma para cada banco).
 
-![Light](./ui/public/light.jpg)
-![Light](./ui/public/dark.jpg)
+![Light](./ui/public/light2.jpg)
+![Light](./ui/public/dark2.jpg)
