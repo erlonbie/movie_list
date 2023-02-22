@@ -55,7 +55,7 @@ function App() {
 
   return (
     <Container>
-      <h1 className='title'>TODO LIST</h1>
+      <h1 className='title'>LISTA DE FILMES</h1>
       <Spacer />
 
       <Flex direction='row'>

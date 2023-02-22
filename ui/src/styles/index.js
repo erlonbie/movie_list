@@ -33,7 +33,7 @@ export const Container = styled.div`
 
 export const Input = styled.input`
   padding: 8px 24px;
-  width: 224px;
+  width: 324px;
   height: 50px;
   background: #ffffff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -74,6 +74,12 @@ export const Button = styled.button`
   border-radius: 10px;
   border: none;
 
+  text-align: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  /* padding: 10px; */
+
   font-weight: 500;
   font-size: 16px;
   line-height: 24px;
@@ -92,7 +98,7 @@ export const Button = styled.button`
 
 export const Item = styled.li`
   padding: 13px 10px 13px 24px;
-  width: 519px;
+  width: 580px;
   min-height: 50px;
   background: ${(props) => (props.checked ? '#da2535' : '#FFFFFF')};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -131,8 +137,11 @@ export const Item = styled.li`
   }
 
   i {
-    font-size: 24px;
-    text-align: left;
+    font-size: 26px;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    justify-content: center;
     /* background: ${(props) => (props.id == 'bd1' ? '#da2535' : 'blue')}; */
     /* background: ${(props) => (props.id == 'bd1' ? 'red' : 'blue')}; */
     /* color: ${(props) => (props.checked ? '#ffffff' : '#000000')}; */
