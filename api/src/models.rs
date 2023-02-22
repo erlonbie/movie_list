@@ -6,26 +6,26 @@ use crate::schema::blog_posts;
 
 #[derive(Serialize, Deserialize, Queryable, AsChangeset, Debug, Insertable, Eq)]
 #[table_name = "blog_posts"]
-pub struct BlogPost {
+pub struct Movie {
     pub id: i32,
     pub title: String,
     pub body: String,
     pub published: bool,
 }
 
-impl PartialEq for BlogPost {
+impl PartialEq for Movie {
     fn eq(&self, other: &Self) -> bool {
         self.title == other.title
     }
 }
 
-impl Ord for BlogPost {
+impl Ord for Movie {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         self.title.cmp(&other.title)
     }
 }
 
-impl PartialOrd for BlogPost {
+impl PartialOrd for Movie {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         Some(self.cmp(other))
     }
@@ -33,7 +33,7 @@ impl PartialOrd for BlogPost {
 
 #[derive(Serialize, Deserialize, Queryable, AsChangeset, Debug, Insertable)]
 #[table_name = "blog_posts"]
-pub struct NewBlogPost {
+pub struct NewMovie {
     pub title: String,
     pub body: String,
     pub published: bool,

@@ -1,7 +1,7 @@
 use diesel::prelude::*;
 
 use api::{
-    models::{BlogPost, NewBlogPost},
+    models::{Movie, NewMovie},
     schema::blog_posts,
     ApiError, Config, Db1, Db2,
 };
@@ -43,7 +43,7 @@ fn index() -> &'static str {
 }
 
 #[rocket::get("/db1")]
-async fn get_all_blog_posts1(connection: Db1) -> Json<Vec<BlogPost>> {
+async fn get_all_blog_posts1(connection: Db1) -> Json<Vec<Movie>> {
     connection
         .run(|c| blog_posts::table.load(c))
         .await
@@ -52,7 +52,7 @@ async fn get_all_blog_posts1(connection: Db1) -> Json<Vec<BlogPost>> {
 }
 
 #[rocket::get("/db2")]
-async fn get_all_blog_posts2(connection: Db2) -> Json<Vec<BlogPost>> {
+async fn get_all_blog_posts2(connection: Db2) -> Json<Vec<Movie>> {
     connection
         .run(|c| blog_posts::table.load(c))
         .await
@@ -61,12 +61,12 @@ async fn get_all_blog_posts2(connection: Db2) -> Json<Vec<BlogPost>> {
 }
 
 #[rocket::get("/")]
-async fn get_all_blog_posts(connection1: Db1, connection2: Db2) -> Json<Vec<BlogPost>> {
-    let v1: Vec<BlogPost> = connection1
+async fn get_all_blog_posts(connection1: Db1, connection2: Db2) -> Json<Vec<Movie>> {
+    let v1: Vec<Movie> = connection1
         .run(|c| blog_posts::table.load(c))
         .await
         .expect("abc");
-    let v2: Vec<BlogPost> = connection2
+    let v2: Vec<Movie> = connection2
         .run(|c| blog_posts::table.load(c))
         .await
         .expect("def");
@@ -90,8 +90,8 @@ async fn get_all_blog_posts(connection1: Db1, connection2: Db2) -> Json<Vec<Blog
 }
 
 #[rocket::get("/random")]
-fn get_random_blog_post() -> Json<BlogPost> {
-    Json(BlogPost {
+fn get_random_blog_post() -> Json<Movie> {
+    Json(Movie {
         id: 1,
         title: "My first post".to_string(),
         body: "This is my first post".to_string(),
@@ -100,8 +100,8 @@ fn get_random_blog_post() -> Json<BlogPost> {
 }
 
 #[rocket::get("/<id>")]
-fn get_blog_post(id: i32) -> Json<BlogPost> {
-    Json(BlogPost {
+fn get_blog_post(id: i32) -> Json<Movie> {
+    Json(Movie {
         id,
         title: "Some title".to_string(),
         body: "Some body".to_string(),
@@ -110,7 +110,7 @@ fn get_blog_post(id: i32) -> Json<BlogPost> {
 }
 
 #[rocket::post("/db1", data = "<blog_post>")]
-async fn create_blog_post1(connection: Db1, blog_post: Json<NewBlogPost>) -> Json<BlogPost> {
+async fn create_blog_post1(connection: Db1, blog_post: Json<NewMovie>) -> Json<Movie> {
     connection
         .run(move |c| {
             diesel::insert_into(blog_posts::table)
@@ -169,7 +169,7 @@ async fn destroy1(connection: Db1, title: String) -> Result<NoContent, NotFound<
 }
 
 #[rocket::post("/db2", data = "<blog_post>")]
-async fn create_blog_post2(connection: Db2, blog_post: Json<NewBlogPost>) -> Json<BlogPost> {
+async fn create_blog_post2(connection: Db2, blog_post: Json<NewMovie>) -> Json<Movie> {
     connection
         .run(move |c| {
             diesel::insert_into(blog_posts::table)
