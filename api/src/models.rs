@@ -2,10 +2,10 @@ use rocket::serde::{Deserialize, Serialize};
 
 use diesel::{AsChangeset, Insertable, Queryable};
 
-use crate::schema::blog_posts;
+use crate::schema::movies;
 
 #[derive(Serialize, Deserialize, Queryable, AsChangeset, Debug, Insertable, Eq)]
-#[table_name = "blog_posts"]
+#[table_name = "movies"]
 pub struct Movie {
     pub id: i32,
     pub title: String,
@@ -32,7 +32,7 @@ impl PartialOrd for Movie {
 }
 
 #[derive(Serialize, Deserialize, Queryable, AsChangeset, Debug, Insertable)]
-#[table_name = "blog_posts"]
+#[table_name = "movies"]
 pub struct NewMovie {
     pub title: String,
     pub body: String,
