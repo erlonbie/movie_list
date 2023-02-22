@@ -73,11 +73,16 @@ async fn get_all_blog_posts(connection1: Db1, connection2: Db2) -> Json<Vec<Blog
 
     let mut data = Vec::new();
     data.extend(v1);
-    for mut item2 in v2 {
+
+    for item2 in v2 {
         if !data.contains(&item2) {
             data.push(item2);
         } else {
-            item2.body = "both".to_string();
+            let mut movie = data.
+                iter_mut().
+                find(|p| { p.title == item2.title })
+                .unwrap();
+            movie.body = "both".to_string();
         }
     }
     data.sort();
@@ -117,12 +122,12 @@ async fn create_blog_post1(connection: Db1, blog_post: Json<NewBlogPost>) -> Jso
         .expect("boo")
 }
 
-#[rocket::options("/db1/delete/<id>")]
-async fn destroy1_option(connection: Db1, id: i32) -> Result<NoContent, NotFound<Json<ApiError>>> {
+#[rocket::options("/db1/delete/<title>")]
+async fn destroy1_option(connection: Db1, title: String) -> Result<NoContent, NotFound<Json<ApiError>>> {
     connection
         .run(move |c| {
             // let affected = diesel::delete(blog_posts::table.filter(blog_posts::title.eq(title)))
-            let affected = diesel::delete(blog_posts::table.filter(blog_posts::id.eq(id)))
+            let affected = diesel::delete(blog_posts::table.filter(blog_posts::title.eq(&title)))
                 .execute(c)
                 .expect("Connection is broken");
             match affected {
@@ -140,12 +145,12 @@ async fn destroy1_option(connection: Db1, id: i32) -> Result<NoContent, NotFound
         })
 }
 
-#[rocket::delete("/db1/delete/<id>")]
-async fn destroy1(connection: Db1, id: i32) -> Result<NoContent, NotFound<Json<ApiError>>> {
+#[rocket::delete("/db1/delete/<title>")]
+async fn destroy1(connection: Db1, title: String) -> Result<NoContent, NotFound<Json<ApiError>>> {
     connection
         .run(move |c| {
             // let affected = diesel::delete(blog_posts::table.filter(blog_posts::title.eq(title)))
-            let affected = diesel::delete(blog_posts::table.filter(blog_posts::id.eq(id)))
+            let affected = diesel::delete(blog_posts::table.filter(blog_posts::title.eq(&title)))
                 .execute(c)
                 .expect("Connection is broken");
             match affected {
@@ -176,12 +181,12 @@ async fn create_blog_post2(connection: Db2, blog_post: Json<NewBlogPost>) -> Jso
         .expect("boo")
 }
 
-#[rocket::options("/db2/delete/<id>")]
-async fn destroy2_option(connection: Db2, id: i32) -> Result<NoContent, NotFound<Json<ApiError>>> {
+#[rocket::options("/db2/delete/<title>")]
+async fn destroy2_option(connection: Db2, title: String) -> Result<NoContent, NotFound<Json<ApiError>>> {
     connection
         .run(move |c| {
             // let affected = diesel::delete(blog_posts::table.filter(blog_posts::title.eq(title)))
-            let affected = diesel::delete(blog_posts::table.filter(blog_posts::id.eq(id)))
+            let affected = diesel::delete(blog_posts::table.filter(blog_posts::title.eq(&title)))
                 .execute(c)
                 .expect("Connection is broken");
             match affected {
@@ -199,12 +204,12 @@ async fn destroy2_option(connection: Db2, id: i32) -> Result<NoContent, NotFound
         })
 }
 
-#[rocket::delete("/db2/delete/<id>")]
-async fn destroy2(connection: Db2, id: i32) -> Result<NoContent, NotFound<Json<ApiError>>> {
+#[rocket::delete("/db2/delete/<title>")]
+async fn destroy2(connection: Db2, title: String) -> Result<NoContent, NotFound<Json<ApiError>>> {
     connection
         .run(move |c| {
             // let affected = diesel::delete(blog_posts::table.filter(blog_posts::title.eq(title)))
-            let affected = diesel::delete(blog_posts::table.filter(blog_posts::id.eq(id)))
+            let affected = diesel::delete(blog_posts::table.filter(blog_posts::title.eq(&title)))
                 .execute(c)
                 .expect("Connection is broken");
             match affected {
